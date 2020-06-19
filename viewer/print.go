@@ -4,6 +4,14 @@ import (
 	"fmt"
 )
 
+func Sprintln(a ...interface{}) string {
+	return fmt.Sprintln(convertArgs(a)...)
+}
+
+func Sprintf(format string, a ...interface{}) string {
+	return fmt.Sprintf(format, convertArgs(a)...)
+}
+
 func Sprint(a ...interface{}) string {
 	return fmt.Sprint(convertArgs(a)...)
 }
