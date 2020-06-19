@@ -4,6 +4,10 @@ import (
 	"fmt"
 )
 
+func Sprint(a ...interface{}) string {
+	return fmt.Sprint(convertArgs(a)...)
+}
+
 func Printf(format string, a ...interface{}) (n int, err error) {
 	return fmt.Printf(format, convertArgs(a)...)
 }
