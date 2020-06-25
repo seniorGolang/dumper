@@ -113,21 +113,6 @@ func (f *formatState) formatPtr(v reflect.Value) {
 		if nilFound || cycleFound {
 			indirect += strings.Count(ve.Type().String(), "*")
 		}
-		_, _ = f.fs.Write(openAngleBytes)
-		_, _ = f.fs.Write([]byte(strings.Repeat("*", indirect)))
-		_, _ = f.fs.Write(closeAngleBytes)
-	}
-
-	// Display pointer information depending on flags.
-	if f.fs.Flag('+') && (len(pointerChain) > 0) {
-		_, _ = f.fs.Write(openParenBytes)
-		for i, addr := range pointerChain {
-			if i > 0 {
-				_, _ = f.fs.Write(pointerChainBytes)
-			}
-			printHexPtr(f.fs, addr)
-		}
-		_, _ = f.fs.Write(closeParenBytes)
 	}
 
 	switch {
