@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"time"
 )
 
 const supportedFlags = "0-+# "
@@ -254,6 +255,13 @@ func (f *formatState) format(v reflect.Value) {
 		_, _ = f.fs.Write(closeMapBytes)
 
 	case reflect.Struct:
+
+		if v.Type() == reflect.TypeOf(time.Time{}) {
+			fmt.Println(v.Type().String(), reflect.TypeOf(time.Time{}), v.Type() == reflect.TypeOf(time.Time{}))
+			_, _ = f.fs.Write([]byte(v.Interface().(time.Time).Format(time.RFC3339)))
+			break
+		}
+
 		numFields := v.NumField()
 		_, _ = f.fs.Write(openBraceBytes)
 		f.depth++
