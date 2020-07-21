@@ -9,7 +9,10 @@ import (
 	"time"
 )
 
-const supportedFlags = "0-+# "
+const (
+	dumpMethod     = "Dump"
+	supportedFlags = "0-+# "
+)
 
 type formatState struct {
 	value          interface{}
@@ -149,6 +152,12 @@ func (f *formatState) format(v reflect.Value) {
 	}
 	f.ignoreNextType = false
 
+	if method := v.MethodByName(dumpMethod); method.IsValid() {
+		if results := method.Call([]reflect.Value{}); len(results) == 1 {
+			_, _ = f.fs.Write([]byte(results[0].String()))
+			return
+		}
+	}
 	switch kind {
 	case reflect.Invalid:
 
