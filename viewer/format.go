@@ -266,7 +266,6 @@ func (f *formatState) format(v reflect.Value) {
 	case reflect.Struct:
 
 		if v.Type() == reflect.TypeOf(time.Time{}) {
-			fmt.Println(v.Type().String(), reflect.TypeOf(time.Time{}), v.Type() == reflect.TypeOf(time.Time{}))
 			_, _ = f.fs.Write([]byte(v.Interface().(time.Time).Format(time.RFC3339)))
 			break
 		}
