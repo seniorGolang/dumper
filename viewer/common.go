@@ -43,16 +43,16 @@ func printBool(w io.Writer, val bool) {
 	}
 }
 
-func printInt(w io.Writer, val int64, base int) {
-	_, _ = w.Write([]byte(strconv.FormatInt(val, base)))
+func intBytes(val int64, base int) []byte {
+	return []byte(strconv.FormatInt(val, base))
 }
 
-func printUint(w io.Writer, val uint64, base int) {
-	_, _ = w.Write([]byte(strconv.FormatUint(val, base)))
+func uintBytes(val uint64, base int) []byte {
+	return []byte(strconv.FormatUint(val, base))
 }
 
-func printFloat(w io.Writer, val float64, precision int) {
-	_, _ = w.Write([]byte(strconv.FormatFloat(val, 'g', -1, precision)))
+func floatBytes(val float64, precision int) []byte {
+	return []byte(strconv.FormatFloat(val, 'g', -1, precision))
 }
 
 func printComplex(w io.Writer, c complex128, floatPrecision int) {

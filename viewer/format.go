@@ -132,7 +132,7 @@ func (f *formatState) formatPtr(v reflect.Value) {
 	}
 }
 
-func (f *formatState) format(v reflect.Value) {
+func (f *formatState) format(v reflect.Value, opts ...option) {
 
 	kind := v.Kind()
 	if kind == reflect.Invalid {
@@ -165,16 +165,16 @@ func (f *formatState) format(v reflect.Value) {
 		printBool(f.fs, v.Bool())
 
 	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
-		printInt(f.fs, v.Int(), 10)
+		_, _ = f.fs.Write(applyOptions(intBytes(v.Int(), 10), opts...))
 
 	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uint:
-		printUint(f.fs, v.Uint(), 10)
+		_, _ = f.fs.Write(applyOptions(uintBytes(v.Uint(), 10), opts...))
 
 	case reflect.Float32:
-		printFloat(f.fs, v.Float(), 32)
+		_, _ = f.fs.Write(applyOptions(floatBytes(v.Float(), 32), opts...))
 
 	case reflect.Float64:
-		printFloat(f.fs, v.Float(), 64)
+		_, _ = f.fs.Write(applyOptions(floatBytes(v.Float(), 64), opts...))
 
 	case reflect.Complex64:
 		printComplex(f.fs, v.Complex(), 32)
@@ -227,7 +227,7 @@ func (f *formatState) format(v reflect.Value) {
 		_, _ = f.fs.Write(closeBracketBytes)
 
 	case reflect.String:
-		_, _ = f.fs.Write([]byte(v.String()))
+		_, _ = f.fs.Write(applyOptions([]byte(v.String()), opts...))
 
 	case reflect.Interface:
 
@@ -286,7 +286,7 @@ func (f *formatState) format(v reflect.Value) {
 					_, _ = f.fs.Write([]byte(vtf.Name))
 					_, _ = f.fs.Write(colonBytes)
 				}
-				f.format(f.unpackValue(v.Field(i)))
+				f.format(f.unpackValue(v.Field(i)), tagToOption(vtf.Tag.Get(tagName)))
 			}
 		}
 		f.depth--
