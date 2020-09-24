@@ -134,6 +134,13 @@ func (f *formatState) formatPtr(v reflect.Value) {
 
 func (f *formatState) format(v reflect.Value, opts ...option) {
 
+	if toString := v.MethodByName("String"); toString.IsValid() {
+		if values := toString.Call(nil); len(values) == 1 {
+			_, _ = f.fs.Write(applyOptions([]byte(values[0].String()), opts...))
+			return
+		}
+	}
+
 	kind := v.Kind()
 	if kind == reflect.Invalid {
 		_, _ = f.fs.Write(invalidAngleBytes)
