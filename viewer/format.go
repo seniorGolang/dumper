@@ -135,6 +135,10 @@ func (f *formatState) formatPtr(v reflect.Value) {
 func (f *formatState) format(v reflect.Value, opts ...option) {
 
 	if toString := v.MethodByName("String"); toString.IsValid() {
+		if v.Kind() == reflect.Ptr && v.IsNil() {
+			_, _ = f.fs.Write(applyOptions([]byte("nil")))
+			return
+		}
 		if values := toString.Call(nil); len(values) == 1 {
 			_, _ = f.fs.Write(applyOptions([]byte(values[0].String()), opts...))
 			return
