@@ -37,11 +37,13 @@ func hide(formula string) option {
 				t, _ = strconv.ParseInt(params[1], 10, 32)
 			}
 		}
-		view = make([]byte, len(bytes))
-		copy(view, bytes)
-		view = append(view[:f], []byte(strings.Repeat("*", len(bytes)-int(f)))...)
-		if t != 0 {
-			view = append(view[:t], bytes[t:]...)
+		if formula != "-" {
+			view = make([]byte, len(bytes))
+			copy(view, bytes)
+			view = append(view[:f], []byte(strings.Repeat("*", len(bytes)-int(f)))...)
+			if t != 0 {
+				view = append(view[:t], bytes[t:]...)
+			}
 		}
 		return
 	}
